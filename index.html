@@ -72,25 +72,6 @@ button:hover {
     <!-- Main + Sidebar Direita -->
     <main id="main-content" class="flex-1 ml-56 p-8 flex transition-all duration-300">
 
-      <!-- Conteúdo principal -->
-      <div class="flex-1 pr-8 space-y-40">
-        <section id="home" class="h-screen  p-10 ">
-          <h2 class="text-2xl font-bold mb-4">🏠 Home</h2>
-          <p>Bem-vindo ao sistema SPA! Use os links para navegar sem recarregar a página.</p>
-        </section>
-      </div>
-
-      <!-- Sidebar Direita (ScrollSpy) -->
-      <aside id="scrollspy" class="w-48 sticky top-20 h-fit bg-white shadow-md border rounded p-4">
-        <h2 class="font-bold mb-4">Seções</h2>
-        <nav class="space-y-2">
-          <a href="#home" class="block px-3 py-2 rounded hover:bg-blue-100">Home</a>
-          <a href="#about" class="block px-3 py-2 rounded hover:bg-blue-100">Sobre</a>
-          <a href="#services" class="block px-3 py-2 rounded hover:bg-blue-100">Serviços</a>
-          <a href="#contact" class="block px-3 py-2 rounded hover:bg-blue-100">Contato</a>
-        </nav>
-      </aside>
-
     </main>
   </div>
 
@@ -164,9 +145,9 @@ button:hover {
       }
 
       updateScrollSpy();
+      loadPage('main/home.html')
     });
   </script>
 
 </body>
 </html>
-
