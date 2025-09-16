@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema SPA com Sidebars</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Importando a fonte Noto Sans */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+/* Definindo a tipografia e cores principais */
+body {
+  font-family: 'Noto Sans', sans-serif;
+  background-color: #f4f4f4;
+  color: #003366;
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilo para cabeçalhos */
+h1, h2, h3, h4, h5, h6 {
+  color: #003366;
+  font-weight: 700;
+}
+
+/* Estilo para links */
+a {
+  color: #003366;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Estilo para botões */
+button {
+  background-color: #003366;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #002244;
+}
+
+    .active { background-color: #2563eb; color: white; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Topbar -->
+  <header class="fixed top-0 left-0 right-0 h-14 bg-white text-gray-700 flex items-center px-6 shadow z-50">
+    <button id="sidebar-toggle" class="mr-4 p-2 rounded hover:bg-blue-500">☰</button>
+    <h1 class="font-bold text-lg"><a href="#" onclick="loadPage('main/home.html')" class="block px-2 rounded hover:bg-blue-100">MinC - Banco de pareceristas</a></h1>
+  </header>
+
+  <div class="flex pt-14">
+
+    <!-- Sidebar Esquerda -->
+    <aside id="sidebar" class="w-56 h-screen bg-gray-50 fixed top-14 left-0 p-4 overflow-y-auto">
+      <ul class="space-y-2">
+        <li><a href="#" onclick="loadPage('main/home.html')" class="block px-2 rounded hover:bg-blue-100">Início</a></li>
+        <li><a href="#" onclick="loadPage('main/services.html')" class="block px-2 rounded hover:bg-blue-100">Início dos trabalhos - Sorteados 2025</a></li>
+
+      </ul>
+    </aside>
+
+    <!-- Main + Sidebar Direita -->
+    <main id="main-content" class="flex-1 ml-56 p-8 flex transition-all duration-300">
+
+      <!-- Conteúdo principal -->
+      <div class="flex-1 pr-8 space-y-40">
+        <section id="home" class="h-screen  p-10 ">
+          <h2 class="text-2xl font-bold mb-4">🏠 Home</h2>
+          <p>Bem-vindo ao sistema SPA! Use os links para navegar sem recarregar a página.</p>
+        </section>
+      </div>
+
+      <!-- Sidebar Direita (ScrollSpy) -->
+      <aside id="scrollspy" class="w-48 sticky top-20 h-fit bg-white shadow-md border rounded p-4">
+        <h2 class="font-bold mb-4">Seções</h2>
+        <nav class="space-y-2">
+          <a href="#home" class="block px-3 py-2 rounded hover:bg-blue-100">Home</a>
+          <a href="#about" class="block px-3 py-2 rounded hover:bg-blue-100">Sobre</a>
+          <a href="#services" class="block px-3 py-2 rounded hover:bg-blue-100">Serviços</a>
+          <a href="#contact" class="block px-3 py-2 rounded hover:bg-blue-100">Contato</a>
+        </nav>
+      </aside>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-blue-600 text-white text-center py-4 mt-10">
+    © 2025 - Meu Sistema SPA | Todos os direitos reservados
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const sidebarToggle = document.getElementById("sidebar-toggle");
+      const sidebar = document.getElementById("sidebar");
+      const mainContent = document.getElementById("main-content");
+
+      // Toggle sidebar
+      sidebarToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("hidden");
+        if (sidebar.classList.contains("hidden")) {
+          mainContent.classList.remove("ml-56");
+          mainContent.classList.add("ml-0");
+        } else {
+          mainContent.classList.remove("ml-0");
+          mainContent.classList.add("ml-56");
+        }
+      });
+
+      // Submenu toggle
+      document.querySelectorAll(".submenu-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const submenu = btn.nextElementSibling;
+          submenu.classList.toggle("hidden");
+        btn.querySelector("span").innerHTML = submenu.classList.contains("hidden")
+  ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+       <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+     </svg>`
+  : `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+       <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 15.75-7.5-7.5-7.5 7.5" />
+     </svg>`;
+        });
+      });
+
+      // Load page dinamicamente
+      function loadPage(url) {
+        fetch(url)
+          .then(response => response.text())
+          .then(html => {
+            document.getElementById("main-content").innerHTML = html;
+            updateScrollSpy();
+          })
+          .catch(err => console.error("Erro ao carregar a página:", err));
+      }
+      window.loadPage = loadPage;
+
+      // ScrollSpy
+      function updateScrollSpy() {
+        const sections = document.querySelectorAll("#main-content section");
+        const navLinks = document.querySelectorAll("#scrollspy a");
+
+        window.addEventListener("scroll", () => {
+          let current = "";
+          sections.forEach(section => {
+            const sectionTop = section.offsetTop - 150;
+            if (scrollY >= sectionTop) current = section.getAttribute("id");
+          });
+          navLinks.forEach(link => {
+            link.classList.remove("active");
+            if (link.getAttribute("href") === "#" + current) link.classList.add("active");
+          });
+        });
+      }
+
+      updateScrollSpy();
+    });
+  </script>
+
+</body>
+</html>
